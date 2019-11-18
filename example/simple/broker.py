@@ -10,7 +10,7 @@ port = 9876
 async def main():
     queue = asyncio.Queue()
     sub_client = SAQSubClient(data_buffer=queue, formatter=lambda x: x)
-    sub_client.connect(host=host, port=port, path='')
+    sub_client.connect(host=host, port=port, path='/saqws')
 
     while True:
         msg = await queue.get()

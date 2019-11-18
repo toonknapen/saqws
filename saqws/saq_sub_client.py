@@ -17,6 +17,7 @@ class SAQSubClient:
         self._formatter = formatter
 
     def connect(self, host, port, path, ssl_context=None):
+        assert path[0] == '/'
         self._task = asyncio.create_task(self._start(host=host, port=port, path=path, ssl_context=ssl_context))
 
     async def wait(self):
@@ -27,7 +28,7 @@ class SAQSubClient:
 
     async def _start(self, host: str, port: int, path: str, ssl_context=None):
         scheme = 'http' if ssl_context is None else 'https'
-        url = f"{scheme}://{host}:{port}/{path}"
+        url = f"{scheme}://{host}:{port}{path}"
         try:
             async with aiohttp.ClientSession() as session:
                 logger.debug('Sub started new session')

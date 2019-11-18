@@ -26,9 +26,10 @@ async def generate_data(pub_server):
 
 
 async def app_entrypoint():
-    print('hello--------------------------------')
     app = aiohttp.web.Application()
-    pub_server = SAQPubServer(app)
+
+    # attach the SAQPubServer
+    pub_server = SAQPubServer(app, '/saqws')
     asyncio.create_task(generate_data(pub_server))
     return app
 
@@ -40,6 +41,8 @@ async def main():
     site = aiohttp.web.TCPSite(runner=runner, host=host, port=port, ssl_context=None)
     await site.start()
 
+    while True:
+        await asyncio.sleep(1)
 
 if __name__ == '__main__':
     asyncio.run(main())
