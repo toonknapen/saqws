@@ -6,8 +6,6 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-host = 'localhost'
-port = 9876
 
 async def generate_data(pub_server):
     while True:
@@ -34,7 +32,7 @@ async def app_entrypoint():
     return app
 
 
-async def main():
+async def main(host, port):
     app = await app_entrypoint()
     runner = aiohttp.web.AppRunner(app)
     await runner.setup()
@@ -45,4 +43,7 @@ async def main():
         await asyncio.sleep(1)
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    host = 'localhost'
+    port = 9876
+
+    asyncio.run(main(host, port))
