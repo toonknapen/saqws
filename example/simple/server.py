@@ -1,11 +1,13 @@
 from saqws import SAQPubServer
-import aiohttp, aiohttp.web
+import aiohttp
+import aiohttp.web
 import asyncio
 import datetime
 import logging
 
 
 logger = logging.getLogger(__name__)
+
 
 async def generate_data(pub_server):
     while True:
@@ -17,7 +19,6 @@ async def generate_data(pub_server):
             duration = (end_lap - start_lap)
             total_dur += duration.seconds
             msg = {'lap': lap+1, 'time': duration.seconds, 'total': total_dur}
-            print(msg)
             pub_server.append(msg)
             start_lap = end_lap
         pub_server.start_new_session()
@@ -43,7 +44,7 @@ async def main(host, port):
         await asyncio.sleep(1)
 
 if __name__ == '__main__':
-    host = 'localhost'
-    port = 9876
+    localhost = 'localhost'
+    localport = 9876
 
-    asyncio.run(main(host, port))
+    asyncio.run(main(localhost, localport))
