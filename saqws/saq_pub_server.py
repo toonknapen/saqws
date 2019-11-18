@@ -9,8 +9,9 @@ class SAQPubServer(object):
     """
 
     """
-    def __init__(self):
+    def __init__(self, app):
         self._saal = SessionAwareAsyncList()
+        app.router.add_routes([aiohttp.web.get('/', self._sub_connection_handler)])
 
     async def launch(self, host, port, ssl_context=None):
         logger.info('Starting')
