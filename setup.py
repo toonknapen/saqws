@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="SAQWS",
+    name="saqws",
     version="0.0.2",
     author="Toon Knapen",
     author_email="find@google",
