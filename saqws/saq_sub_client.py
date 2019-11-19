@@ -18,7 +18,9 @@ class SAQSubClient:
 
     def connect(self, host, port, path, ssl_context=None):
         assert path[0] == '/'
-        self._task = asyncio.create_task(self._start(host=host, port=port, path=path, ssl_context=ssl_context))
+
+        loop = asyncio.get_event_loop()
+        self._task = loop.create_task(self._start(host=host, port=port, path=path, ssl_context=ssl_context))
 
     async def wait(self):
         await self._task

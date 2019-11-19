@@ -13,21 +13,21 @@ class SAQPubServer(object):
         self._saal = SessionAwareAsyncList()
         app.router.add_routes([aiohttp.web.get(path, self._sub_connection_handler)])
 
-    async def launch(self, host, port, ssl_context=None):
-        logger.info('Starting')
-        self._app = aiohttp.web.Application()
-        self._app.router.add_routes([aiohttp.web.get('/', self._sub_connection_handler)])
-        self._runner = aiohttp.web.AppRunner(self._app)
-        await self._runner.setup()
-        self._site = aiohttp.web.TCPSite(runner=self._runner, host=host, port=port, ssl_context=ssl_context)
-        await self._site.start()
-
-    async def down(self):
-        logger.info('Pub downing')
-        self._saal.stop()
-        await self._site.stop()
-        await self._runner.cleanup()
-        logger.info('Pub downed')
+    # async def launch(self, host, port, ssl_context=None):
+    #     logger.info('Starting')
+    #     self._app = aiohttp.web.Application()
+    #     self._app.router.add_routes([aiohttp.web.get('/', self._sub_connection_handler)])
+    #     self._runner = aiohttp.web.AppRunner(self._app)
+    #     await self._runner.setup()
+    #     self._site = aiohttp.web.TCPSite(runner=self._runner, host=host, port=port, ssl_context=ssl_context)
+    #     await self._site.start()
+    #
+    # async def down(self):
+    #     logger.info('Pub downing')
+    #     self._saal.stop()
+    #     await self._site.stop()
+    #     await self._runner.cleanup()
+    #     logger.info('Pub downed')
 
     def append(self, msg):
         try:

@@ -58,10 +58,6 @@ class SessionAwareAsyncList:
             if as_of < len(self._list):
                 return self._list[as_of:]
 
-            # tmp
-            curtask = asyncio.current_task()
-            stack = curtask.get_stack()
-
             # if the subscriber has catched up, just wait for the signal
             await self._event.wait()
 
