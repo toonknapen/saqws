@@ -19,7 +19,6 @@ async def generate_data(pub_server):
             duration = (end_lap - start_lap)
             total_dur += duration.seconds
             msg = {'lap': lap+1, 'time': duration.seconds, 'total': total_dur}
-            print(msg)
             pub_server.append(msg)
             start_lap = end_lap
         pub_server.start_new_session()
