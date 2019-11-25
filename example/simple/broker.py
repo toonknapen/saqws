@@ -4,15 +4,14 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-# host = 'localhost'
-# port = 9876
-host = 'sessionawarequeue1.appspot.com'
-port = None
+scheme = 'http'
+host = 'localhost'
+port = 9876
 
 async def main():
     queue = asyncio.Queue()
     sub_client = SAQSubClient(data_buffer=queue, formatter=lambda x: x)
-    sub_client.connect(scheme='https', host=host, port=port, path='/saqws')
+    sub_client.connect(scheme=scheme, host=host, port=port, path='/saqws')
 
     while True:
         msg = await queue.get()

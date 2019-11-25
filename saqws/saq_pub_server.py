@@ -1,4 +1,5 @@
 import aiohttp, aiohttp.web
+import asyncio
 from .sessionawareasynclist import SessionAwareAsyncList
 import logging
 
@@ -55,6 +56,8 @@ class SAQPubServer(object):
                 session = self._saal.session()  # get the new session that has started
                 num_send = 0
                 await ws.send_json(None)
+        except asyncio.CancelledError:
+            logger.info("WS Canceled")
         except:
             logger.exception('something went wrong')
 
