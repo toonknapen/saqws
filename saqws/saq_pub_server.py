@@ -36,6 +36,7 @@ class SAQPubServer(object):
         """
         session = self._saal.session()
         num_send = 0
+        logger.info(f"Sub connection, backlog-depth:{self._saal.size()}")
 
         ws = aiohttp.web.WebSocketResponse()
         await ws.prepare(request)
