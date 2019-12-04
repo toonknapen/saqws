@@ -10,9 +10,10 @@ class SAQPubServer(object):
     """
 
     """
-    def __init__(self, app, path):
+    def __init__(self, app, path, burst_size=100):
         self._saal = SessionAwareAsyncList()
         app.router.add_routes([aiohttp.web.get(path, self._sub_connection_handler)])
+        self._burst_size = burst_size
 
     def append(self, msg):
         try:
@@ -50,13 +51,12 @@ class SAQPubServer(object):
                     if backlog is None:
                         break  # another session must have started or this was the last session
 
-                    burst_size = 1000
-                    num_sends = len(backlog) // burst_size
+                    num_sends = len(backlog) // self._burst_size
                     for i in range(num_sends):
-                        start = i * burst_size
-                        end = start + burst_size
-                        logger.debug(f"Sending #{len(backlog[start:end])} of total backlog of #{len(backlog)} "
-                                     f"for session #{session} in bursts of {burst_size}")
+                        start = i * self._burst_size
+                        end = start + self._burst_size - 1
+                        logger.debug(f"Sending messages [{start}:{start + len(backlog[start:end])}] of total backlog "
+                                     f"of #{len(backlog)} for session #{session} in bursts of {self._burst_size}")
                         await ws.send_json(backlog[start:end])
                         num_send += len(backlog[start:end])
 
