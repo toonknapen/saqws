@@ -2,6 +2,7 @@ import logging
 import aiohttp
 import aiohttp.client_exceptions
 import asyncio
+import json
 import typing
 
 logger = logging.getLogger(__name__)
@@ -42,8 +43,10 @@ class SAQSubClient:
                         async for msg in ws:
                             logger.debug(f'Sub received {msg}')
                             if msg.type == aiohttp.WSMsgType.TEXT:
-                                formatted_msg = self._formatter(msg.data)
-                                self._data_buffer.put_nowait(formatted_msg)
+                                messages = json.loads(msg.data)
+                                for item in messages:
+                                    formatted_msg = self._formatter(item)
+                                    self._data_buffer.put_nowait(formatted_msg)
                             else:
                                 logger.info(f'inter-websocket received:{msg}')
                 logger.info(f"ws closed")
