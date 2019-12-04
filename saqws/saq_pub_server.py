@@ -50,9 +50,15 @@ class SAQPubServer(object):
                     if backlog is None:
                         break  # another session must have started or this was the last session
 
-                    logger.debug(f"Sending #{len(backlog)} messages for session #{session}")
-                    await ws.send_json(backlog)
-                    num_send += len(backlog)
+                    burst_size = 1000
+                    num_sends = len(backlog) // burst_size
+                    for i in range(num_sends):
+                        start = i * burst_size
+                        end = start + burst_size
+                        logger.debug(f"Sending #{len(backlog[start:end])} of total backlog of #{len(backlog)} "
+                                     f"for session #{session} in bursts of {burst_size}")
+                        await ws.send_json(backlog[start:end])
+                        num_send += len(backlog[start:end])
 
                 session = self._saal.session()  # get the new session that has started
                 num_send = 0
