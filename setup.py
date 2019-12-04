@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="saqws",
-    version="0.0.8",
+    version="0.0.9",
     author="Toon Knapen",
     author_email="find@google",
     description="Session Aware Queue on WebSocket",
