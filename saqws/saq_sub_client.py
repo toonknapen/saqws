@@ -41,10 +41,9 @@ class SAQSubClient:
                     async with session.ws_connect(url=url) as ws:
                         logger.debug('Sub connected')
                         async for msg in ws:
-                            logger.debug(f'Sub received message of len {len(msg)}')
                             if msg.type == aiohttp.WSMsgType.TEXT:
                                 messages = json.loads(msg.data)
-                                logger.debug(f"Adding {len(messages)} to queue")
+                                logger.debug(f"Received {len(messages)} and adding to queue")
                                 for item in messages:
                                     formatted_msg = self._formatter(item)
                                     self._data_buffer.put_nowait(formatted_msg)
