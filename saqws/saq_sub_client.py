@@ -43,10 +43,17 @@ class SAQSubClient:
                         async for msg in ws:
                             if msg.type == aiohttp.WSMsgType.TEXT:
                                 messages = json.loads(msg.data)
-                                logger.debug(f"Received {len(messages)} and adding to queue")
-                                for item in messages:
-                                    formatted_msg = self._formatter(item)
-                                    self._data_buffer.put_nowait(formatted_msg)
+                                if messages is None:  # new session going to start so clean the data-buffer
+                                    try:
+                                        while True:
+                                            self._data_buffer.get_nowait()
+                                    except asyncio.QueueEmpty:
+                                        pass
+                                else:
+                                    logger.debug(f"Received {len(messages)} and adding to queue")
+                                    for item in messages:
+                                        formatted_msg = self._formatter(item)
+                                        self._data_buffer.put_nowait(formatted_msg)
                             else:
                                 logger.info(f'inter-websocket received:{msg}')
                 logger.info(f"ws closed")

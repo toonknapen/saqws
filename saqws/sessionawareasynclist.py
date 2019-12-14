@@ -15,6 +15,7 @@ class SessionAwareAsyncList:
         :param e:
         :return: None
         """
+        assert e is not None
         self._list.append(e)
         self._trigger_waiters()
 

@@ -17,6 +17,7 @@ class SAQPubServer(object):
 
     def append(self, msg):
         try:
+            assert msg is not None  # as None is used to internally communicate new session
             logger.debug(f'append #{self._saal.size()}: {msg} ')
             self._saal.append(msg)
         except:
@@ -51,7 +52,9 @@ class SAQPubServer(object):
                     if backlog is None:
                         break  # another session must have started or this was the last session
 
-                    num_bursts_needed = (len(backlog) // self._burst_size) + 1
+                    num_bursts_needed = (len(backlog) // self._burst_size)
+                    num_bursts_needed += 1 if ((len(backlog) % self._burst_size)) > 0 else 0
+                    print(f'num_burst_needed:{num_bursts_needed}')
                     for i in range(num_bursts_needed):
                         start = i * self._burst_size
                         end = start + self._burst_size
@@ -62,7 +65,7 @@ class SAQPubServer(object):
 
                 session = self._saal.session()  # get the new session that has started
                 num_send = 0
-                await ws.send_json(None)
+                await ws.send_json(None)  # to indicate new session is going to start
         except asyncio.CancelledError:
             logger.info("WS Canceled")
         except:
