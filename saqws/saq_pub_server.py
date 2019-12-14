@@ -54,7 +54,6 @@ class SAQPubServer(object):
 
                     num_bursts_needed = (len(backlog) // self._burst_size)
                     num_bursts_needed += 1 if ((len(backlog) % self._burst_size)) > 0 else 0
-                    print(f'num_burst_needed:{num_bursts_needed}')
                     for i in range(num_bursts_needed):
                         start = i * self._burst_size
                         end = start + self._burst_size
