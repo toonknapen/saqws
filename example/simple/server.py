@@ -17,7 +17,7 @@ async def generate_data(pub_server):
             end_lap = datetime.datetime.now()
             duration = (end_lap - start_lap)
             total_dur += duration.seconds
-            msg = {'lap': lap+1, 'time': duration.seconds, 'total': total_dur}
+            msg = {"type": "lap", "args": lap+1}
             print(f"publishing:{msg}")
             pub_server.append(msg)
             start_lap = end_lap
